@@ -19,6 +19,9 @@ object Dependencies {
 
     // scalafix rules
     lazy val organizeImports = "0.6.0" // https://github.com/liancheng/scalafix-organize-imports
+
+    // compiler plugins
+    lazy val kindProjector = "0.13.2" // https://github.com/typelevel/kind-projector/releases
   }
 
   object Libraries {
@@ -47,6 +50,7 @@ object Dependencies {
 
   object Tools {
     lazy val organizeImports = "com.github.liancheng" %% "organize-imports" % V.organizeImports
+    lazy val kindProjector = "org.typelevel" % "kind-projector" % V.kindProjector
   }
 
 }

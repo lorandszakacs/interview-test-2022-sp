@@ -1,4 +1,3 @@
-// https://github.com/liancheng/scalafix-organize-imports
 ThisBuild / scalafixDependencies += Dependencies.Tools.organizeImports
 
 lazy val root = project
@@ -62,7 +61,8 @@ def commonSettings = Seq(
   testFrameworks += new TestFramework("weaver.framework.CatsEffect"),
   // required for scalafix. For production projects this might slow down compilation too much
   semanticdbEnabled := true,
-  semanticdbVersion := scalafixSemanticdb.revision
+  semanticdbVersion := scalafixSemanticdb.revision,
+  addCompilerPlugin(Dependencies.Tools.kindProjector cross CrossVersion.full)
 )
 
 /** See SBT docs: https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
