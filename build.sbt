@@ -56,13 +56,13 @@ lazy val `spj-prelude` = project
   )
 
 def commonSettings = Seq(
-  scalaVersion := "2.13.7",
+  scalaVersion := "3.2.0",
   // https://disneystreaming.github.io/weaver-test/docs/cats
   testFrameworks += new TestFramework("weaver.framework.CatsEffect"),
   // required for scalafix. For production projects this might slow down compilation too much
   semanticdbEnabled := true,
   semanticdbVersion := scalafixSemanticdb.revision,
-  addCompilerPlugin(Dependencies.Tools.kindProjector cross CrossVersion.full)
+  tpolecatScalacOptions ~= { options => options.+(ScalacOptions.scala3Source("future")) }
 )
 
 /** See SBT docs: https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies

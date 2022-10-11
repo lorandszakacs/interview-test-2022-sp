@@ -1,6 +1,6 @@
 package spj.testkit
 
-import weaver._
+import weaver.*
 
 /** Base class for most our tests. Add helpers and other useful things here
   */

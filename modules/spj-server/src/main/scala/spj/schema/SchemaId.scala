@@ -1,7 +1,8 @@
 package spj.schema
 
-import spj._
+import spj.*
 
+type SchemaId = SchemaId.Type
 object SchemaId extends SpjNewtypeValidated[String] {
   override def refine[F[_]: ApplicativeThrow](value: String): F[SchemaId] = {
     val trimmed = value.trim

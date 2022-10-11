@@ -12,15 +12,15 @@
   *   - 4) our structured exception model lives in the same package, and should by any means be our "standard library",
   *     while most java.lang exceptions are not needed at all in typelevel stack projects
   */
-import cats.{effect => ce}
-package object spj extends ce.syntax.AllSyntax with cats.syntax.AllSyntax {
+import cats.effect.kernel as cekernel
+import cats.effect as ce
+package object spj {
+  export cats.ApplicativeThrow
+  export cats.syntax.all.*
 
-  type ApplicativeThrow[F[_]] = cats.ApplicativeThrow[F]
-  val ApplicativeThrow = cats.ApplicativeThrow
+  export ce.IO
+  export cekernel.Resource
+  export ce.syntax.all.*
 
-  type IO[+A] = ce.IO[A]
-  val IO = ce.IO
-
-  type Resource[F[_], A] = ce.Resource[F, A]
-  val Resource = ce.Resource
+  export fs2.Stream
 }

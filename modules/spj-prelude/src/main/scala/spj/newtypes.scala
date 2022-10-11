@@ -1,4 +1,5 @@
 package spj
+
 import monix.newtypes
 
 /** The reason for creating this simple wrapper is because it gives us control over how _we_ want to use newtypes in

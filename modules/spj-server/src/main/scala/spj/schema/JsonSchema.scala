@@ -5,10 +5,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.fge.jsonschema.main.JsonSchemaFactory
 import com.github.fge.jsonschema.processors.syntax.SyntaxValidator
 import io.circe.Json
-import spj._
+import spj.*
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
+type JsonSchema = JsonSchema.Type
 object JsonSchema extends SpjNewtypeValidated[Json] {
 
   // docs says it's thread safe, so we can only initialize it once

@@ -1,6 +1,6 @@
 package spj
 
-import spj.testkit._
+import spj.testkit.*
 
 object NoopTest extends SpjTest {
   test("no-op") {
