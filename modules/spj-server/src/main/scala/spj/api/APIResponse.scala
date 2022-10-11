@@ -1,8 +1,12 @@
 package spj.api
 
-sealed trait APIResponse extends Product with Serializable
+import spj.*
+import io.circe.Encoder
+
+sealed trait APIResponse
 
 object APIResponse {
+  given Encoder[APIResponse] = ???
 
   /** Example success:
     * {{{

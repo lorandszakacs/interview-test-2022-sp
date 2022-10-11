@@ -16,14 +16,19 @@ object JsonSchema extends SpjNewtypeValidated[Json] {
   private val jsdkObjectMapper: ObjectMapper = new ObjectMapper()
   private val syntaxValidator: SyntaxValidator = JsonSchemaFactory.byDefault().getSyntaxValidator
 
-  override def refine[F[_]: ApplicativeThrow](value: Json): F[Type] = {
-    // converting from circe to string to parse to jackson really is inefficient.
-    // we could use circe-json-schema to avoid this. Or we could just newtype a raw string. At least for the purposes
-    // of this app it wouldn't matter much.
-    // But I guess I'll have to pick up maintenance on circe-json-schema
-    val jsonNode: JsonNode = jsdkObjectMapper.readTree(value.noSpacesSortKeys)
+  override def refine[F[_]: ApplicativeThrow](input: Json): F[Type] = {
+    // it is a waste to make the conversion from circe -> jackson
+    // for the purposes of this simple app we could just newtype raw Strings
+    // but that isn't ideal for production either.
+    // The ideal solution performance-wise would be:
+    // - to use circe-json-schema. Guess I'll have to pick up some maintenance on that.
+    // - use jackson node everywhere... which we could pull off if we newtype-it properly so the java doesn't leak
+    val jsonNode: JsonNode = jsdkObjectMapper.readTree(input.noSpacesSortKeys)
     val report = syntaxValidator.validateSchema(jsonNode)
-    if (report.isSuccess) unsafeCoerce(value).pure[F]
+    if (report.isSuccess) unsafeCoerce(input).pure[F]
     else Anomaly.invalidInput(report.iterator().asScala.map(msg => msg.getMessage).mkString(";")).raiseError[F, Type]
   }
+
+  def fromUserInput[F[_]: ApplicativeThrow](input: JsonSchemaUserInput) =
+    refine[F](input.value)
 }

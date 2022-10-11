@@ -1,7 +1,11 @@
 package spj.api
 
+import io.circe.Json
+import spj.*
+import spj.schema.*
+
 trait SpjAPI[F[_]] {
-  def upload(): F[APIResponse.Upload]
-  def get(): F[APIResponse.Get]
-  def validate(): F[APIResponse.Validate]
+  def upload(schemaId: SchemaId, schema: JsonSchemaUserInput): F[APIResponse.Upload]
+  def get(schemaId: SchemaId): F[APIResponse.Get]
+  def validate(schemaId: SchemaId, rawJson: Json): F[APIResponse.Validate]
 }
