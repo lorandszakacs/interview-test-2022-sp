@@ -62,7 +62,9 @@ def commonSettings = Seq(
   // required for scalafix. For production projects this might slow down compilation too much
   semanticdbEnabled := true,
   semanticdbVersion := scalafixSemanticdb.revision,
-  tpolecatScalacOptions ~= { options => options.+(ScalacOptions.scala3Source("future")) }
+  tpolecatScalacOptions ~= { options =>
+    options.+(ScalacOptions.sourceFuture).+(ScalacOptions.other("-Yno-imports"))
+  }
 )
 
 /** See SBT docs: https://www.scala-sbt.org/release/docs/Multi-Project.html#Per-configuration+classpath+dependencies
