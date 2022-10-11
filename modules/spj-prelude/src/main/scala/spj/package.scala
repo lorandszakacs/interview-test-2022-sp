@@ -15,6 +15,9 @@
 import cats.{effect => ce}
 package object spj extends ce.syntax.AllSyntax with cats.syntax.AllSyntax {
 
+  type ApplicativeThrow[F[_]] = cats.ApplicativeThrow[F]
+  val ApplicativeThrow = cats.ApplicativeThrow
+
   type IO[+A] = ce.IO[A]
   val IO = ce.IO
 
