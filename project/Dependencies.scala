@@ -30,7 +30,21 @@ object Dependencies {
 
     lazy val ip4s = "com.comcast" %% "ip4s-core" % V.ip4s
 
-    lazy val circe = "io.circe" %% "circe-generic" % V.circe
+    lazy val circe = "io.circe" %% "circe-core" % V.circe
+    lazy val circeGeneric = "io.circe" %% "circe-generic" % V.circe
+
+    /** Initially used this to create json literals. Problem is that it's not available for scala 3. The implementation:
+      * {{{
+      * package io.circe
+      *
+      * package object literal {
+      * extension (inline sc: StringContext)
+      *   final inline def json(inline args: Any*): io.circe.Json = ???
+      * }
+      * }}}
+      * Ups :)
+      */
+    lazy val circeLiteral = "io.circe" %% "circe-literal" % V.circe
 
     lazy val http4sServer = "org.http4s" %% "http4s-ember-server" % V.http4s
     lazy val http4sClient = "org.http4s" %% "http4s-ember-client" % V.http4s

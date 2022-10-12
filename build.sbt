@@ -21,6 +21,8 @@ lazy val `spj-server` = project
   .settings(
     libraryDependencies ++= Seq(
       Dependencies.Libraries.skunk,
+      Dependencies.Libraries.circe,
+      Dependencies.Libraries.circeGeneric,
       Dependencies.Libraries.http4sServer,
       Dependencies.Libraries.http4sCirce,
       Dependencies.Libraries.http4sDsl,

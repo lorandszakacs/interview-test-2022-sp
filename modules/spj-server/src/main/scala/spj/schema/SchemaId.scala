@@ -1,9 +1,12 @@
 package spj.schema
 
 import spj.*
+import io.circe.Encoder
 
 type SchemaId = SchemaId.Type
 object SchemaId extends SpjNewtypeValidated[String] {
+  given Encoder[Type] = derive[Encoder]
+
   override def refine[F[_]: ApplicativeThrow](value: String): F[SchemaId] = {
     val trimmed = value.trim
     // not using .blank because that is only available on JDK 11+.
