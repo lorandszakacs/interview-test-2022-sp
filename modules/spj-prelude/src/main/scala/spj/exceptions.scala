@@ -14,6 +14,15 @@ def ???(using pos: SourcePos): Nothing = throw Anomaly.unimplemented
 @targetName("unimplementedExceptionF")
 def ????[F[_], A](using pos: SourcePos, F: ApplicativeThrow[F]): F[A] = F.raiseError(Anomaly.unimplemented)
 
+/** Provides straightforward way of wrapping unknown Throwables, useful at the boundaries of our application
+  */
+extension (t: Throwable) {
+  def anomaly: Anomaly = t match {
+    case a: Anomaly => a
+    case _          => Anomaly.unknownAnomaly(t)
+  }
+}
+
 /** We could further refine the API, obviously. But the point I wanted to illustrate is that in projects I do like do
   * better define the domain of the exceptions as well.
   *
@@ -24,6 +33,10 @@ def ????[F[_], A](using pos: SourcePos, F: ApplicativeThrow[F]): F[A] = F.raiseE
   *
   * And this approach works very well with our "prelude", because our exceptions are now part of the "stadard library"
   * of this project! => good dev UX.
+  *
+  * Potential improvements:
+  *   - add pos: SourcePos to all Anomaly types. this can be trivially done without a source breaking change in
+  *     downstream code by adding a (using pos: SourcePos) to all methods
   */
 sealed abstract class Anomaly(
     message: String,
@@ -39,8 +52,17 @@ open class InconsistentState(message: String, val cause: Option[Throwable]) exte
 
 open class Unimplemented(pos: SourcePos) extends Anomaly(s"Unimplemented @ $pos", Option.empty)
 
+/** The reason why these methods return Throwable, instead of Anomaly is because type inference routinely will fail for
+  * things for similar shape to that of cats.MonadThrow. The reason is that it's invariant in its error type :( Meaning
+  * that cats.syntax.all.* related to errors will barely work since all syntax is expressed in terms of type classes,
+  * not concrete types.
+  *
+  * Sometimes in real software we hack around libraries to give ourselves a nice api.
+  */
 object Anomaly {
-  def unknown(cause: Throwable): Throwable =
+  def unknown(cause: Throwable): Throwable = unknownAnomaly(cause)
+
+  def unknownAnomaly(cause: Throwable): Anomaly =
     new Unknown(s"An unknown error occurred. Caused by: ${cause.getMessage}", cause)
 
   def invalidInput(message: String): Throwable = new InvalidInput(message = message, cause = Option.empty)
