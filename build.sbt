@@ -51,7 +51,8 @@ lazy val `spj-prelude` = project
       Dependencies.Libraries.monixNewtypes,
       Dependencies.Libraries.cats,
       Dependencies.Libraries.catsEffect,
-      Dependencies.Libraries.fs2
+      Dependencies.Libraries.fs2,
+      Dependencies.Libraries.sourcePos
     )
   )
 

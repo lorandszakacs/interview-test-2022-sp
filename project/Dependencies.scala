@@ -11,6 +11,7 @@ object Dependencies {
     lazy val circe              = "0.14.3"      // https://github.com/circe/circe/releases
     lazy val http4s             = "0.23.6"      // https://github.com/http4s/http4s/releases
     lazy val skunk              = "0.3.2"       // https://github.com/tpolecat/skunk/releases
+    lazy val sourcePos          = "1.0.1"       // https://github.com/tpolecat/SourcePos/releases
     // testing
     lazy val weaverTest         = "0.8.0"       // https://github.com/disneystreaming/weaver-test/releases
     // java
@@ -37,6 +38,7 @@ object Dependencies {
     lazy val http4sDsl = "org.http4s" %% "http4s-dsl" % V.http4s
 
     lazy val skunk = "org.tpolecat" %% "skunk-core" % V.skunk
+    lazy val sourcePos = "org.tpolecat" %% "sourcepos" % V.sourcePos
 
     lazy val weaverTest = "com.disneystreaming" %% "weaver-cats" % V.weaverTest
 

@@ -20,12 +20,14 @@ package object spj {
   export java.lang.String
   export java.lang.Throwable
 
-  export scala.Predef.???
+  export scala.Nothing
+  type Unit = scala.Unit
+
+  export scala.Predef.ArrowAssoc
   export scala.Option
   export scala.Either
   type Attempt[+R] = Either[Throwable, R]
 
-  type Unit = scala.Unit
   export scala.List
 
   export cats.ApplicativeThrow

@@ -1,6 +1,18 @@
 package spj
 
+import org.tpolecat.sourcepos.SourcePos
+
+import scala.annotation.targetName
 import scala.util.control.NoStackTrace
+
+/** A much better version of the method if you ask me :) points to the source position, doesn't go through an annoying
+  * stack trace to find where you forgot to implement things
+  */
+@targetName("unimplementedException")
+def ???(using pos: SourcePos): Nothing = throw Anomaly.unimplemented
+
+@targetName("unimplementedExceptionF")
+def ????[F[_], A](using pos: SourcePos, F: ApplicativeThrow[F]): F[A] = F.raiseError(Anomaly.unimplemented)
 
 /** We could further refine the API, obviously. But the point I wanted to illustrate is that in projects I do like do
   * better define the domain of the exceptions as well.
@@ -19,22 +31,26 @@ sealed abstract class Anomaly(
 ) extends Throwable(message, cause.orNull)
     with NoStackTrace
 
-abstract class InvalidInput(message: String, val cause: Option[Throwable]) extends Anomaly(message, Option.empty)
+open class InvalidInput(message: String, val cause: Option[Throwable]) extends Anomaly(message, Option.empty)
 
-abstract class Unknown(message: String, val cause: Throwable) extends Anomaly(message, Option(cause))
+open class Unknown(message: String, val cause: Throwable) extends Anomaly(message, Option(cause))
 
-abstract class InconsistentState(message: String, val cause: Option[Throwable]) extends Anomaly(message, cause)
+open class InconsistentState(message: String, val cause: Option[Throwable]) extends Anomaly(message, cause)
+
+open class Unimplemented(pos: SourcePos) extends Anomaly(s"Unimplemented @ $pos", Option.empty)
 
 object Anomaly {
   def unknown(cause: Throwable): Throwable =
-    new Unknown(s"An unknown error occurred. Caused by: ${cause.getMessage}", cause) {}
+    new Unknown(s"An unknown error occurred. Caused by: ${cause.getMessage}", cause)
 
-  def invalidInput(message: String): Throwable = new InvalidInput(message = message, cause = Option.empty) {}
-  def invalidInput(message: String, cause: Throwable): Throwable = new InvalidInput(message, Option(cause)) {}
+  def invalidInput(message: String): Throwable = new InvalidInput(message = message, cause = Option.empty)
+  def invalidInput(message: String, cause: Throwable): Throwable = new InvalidInput(message, Option(cause))
 
   /** This always represents a bug. Usually arises due to the fact that we can't express everything we want in our type
     * system For instance, doing a write to the DB + a read, you "know" that the read should always return, but if it
     * doesn't, that's definitely a bug.
     */
-  def inconsistent(message: String): Throwable = new InconsistentState(message = message, cause = Option.empty) {}
+  def inconsistent(message: String): Throwable = new InconsistentState(message = message, cause = Option.empty)
+
+  def unimplemented(using pos: SourcePos): Throwable = new Unimplemented(pos)
 }
