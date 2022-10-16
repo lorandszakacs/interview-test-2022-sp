@@ -11,6 +11,7 @@ export skunk.Decoder
 export skunk.Encoder
 export skunk.Codec
 export skunk.Void
+export skunk.SqlState
 export skunk.implicits.*
 export skunk.codec.all.*
 export skunk.circe.codec.json.jsonb
