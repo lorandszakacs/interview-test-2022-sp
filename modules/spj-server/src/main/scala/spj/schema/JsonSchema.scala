@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.fge.jsonschema.main.JsonSchemaFactory
 import com.github.fge.jsonschema.processors.syntax.SyntaxValidator
-import io.circe.{Json, Encoder}
+import io.circe.{Json, Decoder, Encoder}
 import spj.*
 
 import scala.jdk.CollectionConverters.*
@@ -12,6 +12,7 @@ import scala.jdk.CollectionConverters.*
 type JsonSchema = JsonSchema.Type
 object JsonSchema extends SpjNewtypeValidated[Json] {
   given Encoder[JsonSchema] = derive[Encoder]
+  given Decoder[JsonSchema] = derive[Decoder]
 
   // docs says it's thread safe, so we can only initialize it once
   private val jsdkObjectMapper: ObjectMapper = new ObjectMapper()

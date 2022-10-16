@@ -53,6 +53,7 @@ object Dependencies {
     lazy val http4sDsl = "org.http4s" %% "http4s-dsl" % V.http4s
 
     lazy val skunk = "org.tpolecat" %% "skunk-core" % V.skunk
+    lazy val skunkCirce = "org.tpolecat" %% "skunk-circe" % V.skunk
     lazy val sourcePos = "org.tpolecat" %% "sourcepos" % V.sourcePos
 
     lazy val ciris = "is.cir" %% "ciris" % V.ciris

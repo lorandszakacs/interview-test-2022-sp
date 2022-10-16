@@ -50,6 +50,7 @@ lazy val `spj-db` = project
   .settings(
     libraryDependencies ++= Seq(
       Dependencies.Libraries.skunk,
+      Dependencies.Libraries.skunkCirce,
       Dependencies.Libraries.ip4s
     )
   )
