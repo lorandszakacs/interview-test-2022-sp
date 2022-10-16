@@ -1,7 +1,7 @@
 package spj.schema.api
 
 import io.circe.Json
-import skunk.Session
+import spj.db.Session
 import spj.*
 import spj.schema.*
 
