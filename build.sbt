@@ -5,7 +5,14 @@ lazy val root = project
   .settings(
     name := "sp-json-validator"
   )
-  .aggregate(`spj-prelude`, `spj-testkit`, `spj-server`, `spj-app`)
+  .aggregate(
+    `spj-prelude`,
+    `spj-testkit`,
+    `spj-db`,
+    `spj-config`,
+    `spj-server`,
+    `spj-app`
+  )
 
 lazy val `spj-app` = project
   .in(file("modules/spj-app"))
@@ -20,19 +27,47 @@ lazy val `spj-server` = project
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      Dependencies.Libraries.skunk,
       Dependencies.Libraries.circe,
       Dependencies.Libraries.circeGeneric,
       Dependencies.Libraries.http4sServer,
       Dependencies.Libraries.http4sCirce,
       Dependencies.Libraries.http4sDsl,
       Dependencies.Libraries.java.jsonSchemaValidator,
+      Dependencies.Libraries.ciris,
       Dependencies.Libraries.http4sClient % Test
     )
   )
   .dependsOn(
     `spj-prelude`,
+    `spj-db`,
+    `spj-config`,
     asTestingLibrary(`spj-testkit`)
+  )
+
+lazy val `spj-db` = project
+  .in(file("modules/spj-db"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      Dependencies.Libraries.skunk,
+      Dependencies.Libraries.ip4s
+    )
+  )
+  .dependsOn(
+    `spj-prelude`
+  )
+
+lazy val `spj-config` = project
+  .in(file("modules/spj-config"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      Dependencies.Libraries.ciris,
+      Dependencies.Libraries.ip4s
+    )
+  )
+  .dependsOn(
+    `spj-prelude`
   )
 
 lazy val `spj-testkit` = project
