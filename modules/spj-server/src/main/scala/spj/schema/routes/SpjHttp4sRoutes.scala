@@ -3,8 +3,8 @@ package spj.schema.routes
 import io.circe.*
 import io.circe.syntax.*
 import org.http4s.*
-import org.http4s.dsl.*
 import org.http4s.circe.*
+import org.http4s.dsl.*
 import spj.*
 import spj.schema.*
 import spj.schema.api.*

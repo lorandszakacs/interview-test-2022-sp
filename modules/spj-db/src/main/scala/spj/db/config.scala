@@ -1,6 +1,6 @@
 package spj.db
-import spj.*
 import com.comcast.ip4s.*
+import spj.*
 
 type DbUser = DbUser.Type
 object DbUser extends SpjNewsubtype[String]

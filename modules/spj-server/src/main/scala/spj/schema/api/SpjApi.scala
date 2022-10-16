@@ -1,8 +1,8 @@
 package spj.schema.api
 
 import io.circe.Json
-import spj.db.Session
 import spj.*
+import spj.db.Session
 import spj.schema.*
 import spj.schema.psql.*
 

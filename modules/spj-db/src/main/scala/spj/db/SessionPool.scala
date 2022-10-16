@@ -1,8 +1,8 @@
 package spj.db
 
-import spj.*
 import fs2.io.net.Network
 import natchez.Trace
+import spj.*
 
 /** Pseudo-companion object for the skunk.SessionPool type alias w/ our own flavor :)
   */

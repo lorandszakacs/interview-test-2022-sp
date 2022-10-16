@@ -1,7 +1,7 @@
 package spj.schema
 
-import spj.*
 import io.circe.Encoder
+import spj.*
 
 type SchemaId = SchemaId.Type
 object SchemaId extends SpjNewtypeValidated[String] {

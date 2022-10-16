@@ -1,7 +1,8 @@
 package spj.schema
 
+import io.circe.Encoder
+import io.circe.Json
 import spj.*
-import io.circe.{Json, Encoder}
 
 type ValidatedJson = ValidatedJson.Type
 object ValidatedJson extends monix.newtypes.Newsubtype[Json] {

@@ -1,9 +1,11 @@
 package spj.schema.api
 
+import io.circe.Encoder
+import io.circe.Json
+import io.circe.JsonObject
+import io.circe.generic.semiauto
 import spj.*
 import spj.schema.*
-import io.circe.{Encoder, Json, JsonObject}
-import io.circe.generic.semiauto
 
 sealed trait ApiResponse
 
