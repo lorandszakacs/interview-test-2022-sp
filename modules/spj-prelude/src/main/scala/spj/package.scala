@@ -30,10 +30,14 @@ package object spj {
 
   export scala.Nothing
   type Unit = scala.Unit
+  export scala.Int
+  export scala.Boolean
 
   export scala.Predef.ArrowAssoc
   export scala.Option
   export scala.Either
+  export scala.Left
+  export scala.Right
   type Attempt[+R] = Either[Throwable, R]
 
   export scala.List
@@ -44,9 +48,12 @@ package object spj {
 
   export ce.IO
   export cekernel.Concurrent
+  export cekernel.Async
   export cekernel.Resource
   export cekernel.MonadCancelThrow
   export ce.syntax.all.*
+
+  export ce.std.Console
 
   export fs2.Stream
 }

@@ -17,6 +17,13 @@ abstract class SpjNewtypeValidated[Src] extends newtypes.NewtypeValidated[Src] {
     refine[Either[Throwable, *]](value).leftMap { failure => newtypes.BuildFailure[Type](failure.getMessage) }
 }
 
+abstract class SpjNewsubtypeValidated[Src] extends newtypes.NewsubtypeValidated[Src] {
+  def refine[F[_]: ApplicativeThrow](value: Src): F[Type]
+
+  override final def apply(value: Src): Either[newtypes.BuildFailure[Type], Type] =
+    refine[Either[Throwable, *]](value).leftMap { failure => newtypes.BuildFailure[Type](failure.getMessage) }
+}
+
 /** The vast majority of newtypes are the "wrapped" ones, where you don't add validation, and you just want to do:
   * {{{
   *   ThisString("thisOne")
@@ -25,3 +32,5 @@ abstract class SpjNewtypeValidated[Src] extends newtypes.NewtypeValidated[Src] {
   * typing "Wrapped" as an extra for what we use as the default is annoying
   */
 abstract class SpjNewtype[Src] extends newtypes.NewtypeWrapped[Src]
+
+abstract class SpjNewsubtype[Src] extends newtypes.NewsubtypeWrapped[Src]
