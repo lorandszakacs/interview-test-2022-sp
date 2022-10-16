@@ -4,6 +4,7 @@ import io.circe.Json
 import spj.db.Session
 import spj.*
 import spj.schema.*
+import spj.schema.psql.*
 
 /** Not entirely happy with this interface and the encoding of [[ApiResponse]]. It's clunky, bulky, but it does get the
   * job done. It definitely needs rethinking if this would be a more general pattern as the app grows. Had the API
@@ -78,21 +79,35 @@ object SpjApi {
     }
     import NF.unfailing
 
-    override def upload(schemaId: SchemaId, schema: JsonSchemaUserInput): NF[ApiResponse.Upload] = db
-      .use { session =>
-        ????[F, ApiResponse.Upload]
-      }
-      .unfailing(e => ApiResponse.UploadFailure(schemaId, e.anomaly))
+    private val schemaDb: Resource[F, SchemaPsql[F]] = db.map(SchemaPsql.apply[F])
 
-    override def get(schemaId: SchemaId): NF[ApiResponse.Get] = db
-      .use { session =>
-        ????[F, ApiResponse.Get]
+    override def upload(schemaId: SchemaId, schema: JsonSchemaUserInput): NF[ApiResponse.Upload] =
+      JsonSchema
+        .fromUserInput[F](schema)
+        .flatMap { jsonSchema =>
+          schemaDb.use { schemaPsql =>
+            schemaPsql.insert(schemaId, jsonSchema).as(ApiResponse.UploadSuccess(schemaId))
+          }
+        }
+        .unfailing(e => ApiResponse.UploadFailure(schemaId, e.anomaly))
+
+    private def getRaw(schemaPsql: SchemaPsql[F])(schemaId: SchemaId): F[JsonSchema] = schemaPsql
+      .find(schemaId)
+      .flatMap(_.liftTo[F](Anomaly.notFound("json schema not found")))
+
+    override def get(schemaId: SchemaId): NF[ApiResponse.Get] = schemaDb
+      .use { schemaPsql =>
+        getRaw(schemaPsql)(schemaId).map(jsonSchema => ApiResponse.GetSuccess(schemaId, jsonSchema))
       }
       .unfailing(e => ApiResponse.GetFailure(schemaId, e.anomaly))
 
-    override def validate(schemaId: SchemaId, rawJson: Json): NF[ApiResponse.Validate] = db
-      .use { session =>
-        ????[F, ApiResponse.Validate]
+    override def validate(schemaId: SchemaId, rawJson: Json): NF[ApiResponse.Validate] = schemaDb
+      .use { schemaPsql =>
+        getRaw(schemaPsql)(schemaId).flatMap { jsonSchema =>
+          ValidatedJson
+            .validate[F](rawJson, jsonSchema)
+            .map(validated => ApiResponse.ValidateSuccess(schemaId, validated))
+        }
       }
       .unfailing(e => ApiResponse.ValidateFailure(schemaId, e.anomaly))
 

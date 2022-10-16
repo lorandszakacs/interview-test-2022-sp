@@ -22,7 +22,7 @@ object ApiResponse {
     * {"action":"uploadSchema","id":"config-schema","status":"success"}
     * }}}
     */
-  final case class UploadSuccess private (id: SchemaId) extends Upload
+  final case class UploadSuccess(id: SchemaId) extends Upload
   object UploadSuccess extends SuccessCompanion[UploadSuccess]("uploadSchema")(semiauto.deriveEncoder)
 
   /** Example failure:
