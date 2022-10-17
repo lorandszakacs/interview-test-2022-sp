@@ -35,7 +35,7 @@ final class SpjHttp4sRoutes[F[_]] private (
           resp <- Created(jsonBody(upload))
         } yield resp
 
-      case req @ (PUT -> Root / "schema" / SchemaIdMatcher(schemaId)) =>
+      case req @ (POST -> Root / "validate" / SchemaIdMatcher(schemaId)) =>
         for {
           rawJson <- req.asJson
           validate <- spjApi.validate(schemaId, rawJson)
