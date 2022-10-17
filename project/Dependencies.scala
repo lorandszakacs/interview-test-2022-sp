@@ -19,6 +19,7 @@ object Dependencies {
     lazy val jsonSchema         = "2.2.14"      // https://github.com/java-json-tools/json-schema-validator/releases
     lazy val flyway             = "9.4.0"       // https://github.com/flyway/flyway/releases
     lazy val postgresqlJdbc     = "42.3.7"      // https://github.com/pgjdbc/pgjdbc/tags
+    lazy val logbackClassic     = "1.3.4"       // https://github.com/qos-ch/logback/tags
     // format: on
 
     // scalafix rules
@@ -69,6 +70,7 @@ object Dependencies {
       // required by flyway
       lazy val postgresqlJdbc = "org.postgresql" % "postgresql" % V.postgresqlJdbc withSources ()
 
+      lazy val logbackClassic = "ch.qos.logback" % "logback-classic" % V.logbackClassic withSources ()
     }
   }
 

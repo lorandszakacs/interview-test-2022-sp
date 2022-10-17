@@ -33,9 +33,9 @@ lazy val `spj-server` = project
       Dependencies.Libraries.http4sServer,
       Dependencies.Libraries.http4sCirce,
       Dependencies.Libraries.http4sDsl,
-      Dependencies.Libraries.java.jsonSchemaValidator,
       Dependencies.Libraries.ciris,
-      Dependencies.Libraries.http4sClient % Test
+      Dependencies.Libraries.java.jsonSchemaValidator,
+      Dependencies.Libraries.java.logbackClassic
     )
   )
   .dependsOn(
