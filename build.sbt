@@ -118,7 +118,8 @@ def commonSettings = Seq(
   semanticdbEnabled := true,
   semanticdbVersion := scalafixSemanticdb.revision,
   tpolecatScalacOptions ~= { options =>
-    options.+(ScalacOptions.sourceFuture).+(ScalacOptions.other("-Yno-imports"))
+    // indentation really slows down IDEs... so for now we don't try these syntax changes
+    options.+(ScalacOptions.sourceFuture).+(ScalacOptions.other("-Yno-imports")).+(ScalacOptions.other("-no-indent"))
   }
 )
 
