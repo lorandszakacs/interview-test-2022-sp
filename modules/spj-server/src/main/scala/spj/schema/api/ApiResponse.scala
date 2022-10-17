@@ -33,7 +33,7 @@ object ApiResponse {
     * }}}
     */
   final case class UploadFailure(id: SchemaId, message: Anomaly) extends Upload
-  object UploadFailure extends FailureCompanion[UploadFailure]("validateDocument")(semiauto.deriveEncoder)
+  object UploadFailure extends FailureCompanion[UploadFailure]("uploadSchema")(semiauto.deriveEncoder)
 
   sealed trait Get extends ApiResponse
   object Get {
@@ -51,7 +51,7 @@ object ApiResponse {
   object GetSuccess extends SuccessCompanion[GetSuccess]("getSchema")(semiauto.deriveEncoder)
 
   final case class GetFailure(id: SchemaId, message: Anomaly) extends Get
-  object GetFailure extends FailureCompanion[GetFailure]("validateDocument")(semiauto.deriveEncoder)
+  object GetFailure extends FailureCompanion[GetFailure]("getSchema")(semiauto.deriveEncoder)
 
   sealed trait Validate extends ApiResponse
   object Validate {

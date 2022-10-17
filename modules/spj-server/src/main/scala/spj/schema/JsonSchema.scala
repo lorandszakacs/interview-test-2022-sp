@@ -20,7 +20,7 @@ object JsonSchema extends SpjNewtypeValidated[Json] {
   private val jsdkObjectMapper: ObjectMapper = new ObjectMapper()
   private val syntaxValidator: SyntaxValidator = JsonSchemaFactory.byDefault().getSyntaxValidator
 
-  override def refine[F[_]: ApplicativeThrow](input: Json): F[Type] = {
+  override def refine[F[_]: ApplicativeThrow](input: Json): F[JsonSchema] = {
     // it is a waste to make the conversion from circe -> jackson
     // for the purposes of this simple app we could just newtype raw Strings
     // but that isn't ideal for production either.
@@ -30,9 +30,10 @@ object JsonSchema extends SpjNewtypeValidated[Json] {
     val jsonNode: JsonNode = jsdkObjectMapper.readTree(input.noSpacesSortKeys)
     val report = syntaxValidator.validateSchema(jsonNode)
     if (report.isSuccess) unsafeCoerce(input).pure[F]
-    else Anomaly.invalidInput(report.iterator().asScala.map(msg => msg.getMessage).mkString(";")).raiseError[F, Type]
+    else
+      Anomaly.invalidInput(report.iterator().asScala.map(msg => msg.getMessage).mkString(";")).raiseError[F, JsonSchema]
   }
 
-  def fromUserInput[F[_]: ApplicativeThrow](input: JsonSchemaUserInput) =
+  def fromUserInput[F[_]: ApplicativeThrow](input: JsonSchemaUserInput): F[JsonSchema] =
     refine[F](input.value)
 }
