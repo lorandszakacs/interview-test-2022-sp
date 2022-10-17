@@ -65,7 +65,8 @@ lazy val `spj-flyway` = project
   .settings(commonSettings)
   .settings(
     libraryDependencies ++= Seq(
-      Dependencies.Libraries.java.flyway
+      Dependencies.Libraries.java.flyway,
+      Dependencies.Libraries.java.postgresqlJdbc
     )
   )
   .dependsOn(

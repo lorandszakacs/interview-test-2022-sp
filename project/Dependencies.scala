@@ -18,6 +18,7 @@ object Dependencies {
     // java
     lazy val jsonSchema         = "2.2.14"      // https://github.com/java-json-tools/json-schema-validator/releases
     lazy val flyway             = "9.4.0"       // https://github.com/flyway/flyway/releases
+    lazy val postgresqlJdbc     = "42.3.7"      // https://github.com/pgjdbc/pgjdbc/tags
     // format: on
 
     // scalafix rules
@@ -64,6 +65,9 @@ object Dependencies {
     object java {
       lazy val jsonSchemaValidator = "com.github.java-json-tools" % "json-schema-validator" % V.jsonSchema
       lazy val flyway = "org.flywaydb" % "flyway-core" % V.flyway
+      // required by flyway
+      lazy val postgresqlJdbc = "org.postgresql" % "postgresql" % V.postgresqlJdbc
+
     }
   }
 

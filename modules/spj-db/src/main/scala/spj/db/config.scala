@@ -14,7 +14,7 @@ object DbName extends SpjNewsubtypeValidated[String] {
     // TODO: can add more validations, but this is here to prove a point
     if (value.trim.isEmpty)
       Anomaly.invalidInput("database name cannot be empty").raiseError[F, DbName]
-    else if (value.length <= 64)
+    else if (value.length > 64)
       Anomaly.invalidInput("database name cannot be longer than 64 characters").raiseError[F, DbName]
     else unsafeCoerce(value).pure[F]
   }
