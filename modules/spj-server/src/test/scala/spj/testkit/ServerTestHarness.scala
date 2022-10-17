@@ -1,20 +1,20 @@
 package spj.testkit
 
-import spj.*
-import spj.db.*
-import spj.config.*
-import spj.schema.*
-import spj.db.flyway.*
-import spj.testkit.*
+import io.circe.*
 import io.circe.parser
+import io.circe.syntax.*
 import org.http4s.*
-import org.http4s.circe.*
 import org.http4s.circe.CirceEntityEncoder.{*, given}
+import org.http4s.circe.*
 import org.http4s.dsl.io.*
 import org.http4s.implicits.*
+import spj.*
+import spj.config.*
+import spj.db.*
+import spj.db.flyway.*
 import spj.schema.JsonSchemaUserInput
-import io.circe.*
-import io.circe.syntax.*
+import spj.schema.*
+import spj.testkit.*
 
 abstract class ServerTestHarness extends SpjTest {
   final case class Test(

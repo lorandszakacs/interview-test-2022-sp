@@ -1,8 +1,8 @@
 package spj.db.flyway
 
+import org.flywaydb.core.Flyway as JFlyway
 import spj.*
 import spj.db.DbConfig
-import org.flywaydb.core.Flyway as JFlyway
 
 object Flyway {
 

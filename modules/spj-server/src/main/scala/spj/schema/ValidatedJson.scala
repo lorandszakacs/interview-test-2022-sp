@@ -1,11 +1,12 @@
 package spj.schema
 
-import io.circe.Encoder
-import io.circe.Json
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
-import com.github.fge.jsonschema.main.{JsonSchemaFactory, JsonValidator}
+import com.github.fge.jsonschema.main.JsonSchemaFactory
+import com.github.fge.jsonschema.main.JsonValidator
 import com.github.fge.jsonschema.processors.syntax.SyntaxValidator
+import io.circe.Encoder
+import io.circe.Json
 import spj.*
 
 import scala.jdk.CollectionConverters.*
