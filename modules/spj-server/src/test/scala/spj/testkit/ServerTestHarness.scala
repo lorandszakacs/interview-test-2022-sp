@@ -5,15 +5,12 @@ import io.circe.parser
 import io.circe.syntax.*
 import org.http4s.*
 import org.http4s.circe.CirceEntityEncoder.{*, given}
-import org.http4s.circe.*
 import org.http4s.dsl.io.*
 import org.http4s.implicits.*
 import spj.*
 import spj.config.*
 import spj.db.*
 import spj.db.flyway.*
-import spj.schema.JsonSchemaUserInput
-import spj.schema.*
 import spj.testkit.*
 
 abstract class ServerTestHarness extends SpjTest {
@@ -42,14 +39,6 @@ abstract class ServerTestHarness extends SpjTest {
   protected def expectJsonBody(resp: Response[IO])(j: String): IO[Json] = {
     for {
       responseJson <- resp.body.through(fs2.text.utf8.decode[IO]).compile.string.flatMap(parseJson)
-      _ <- IO.println(
-        s"""
-           |
-           |json
-           |${responseJson.spaces2}
-           |
-           |""".stripMargin
-      )
       expectedJson <- parseJson(j)
       _ <- assert(expectedJson.noSpacesSortKeys == responseJson.noSpacesSortKeys).failFast
     } yield responseJson

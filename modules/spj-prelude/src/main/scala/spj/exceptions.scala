@@ -48,6 +48,9 @@ open class InvalidInput(message: String, val cause: Option[Throwable]) extends A
 
 open class NotFound(message: String) extends Anomaly(message, Option.empty)
 
+open class Conflict(what: String, value: String)
+    extends Anomaly(s"Conflict on resource: $what, value: $value", Option.empty)
+
 open class Unknown(message: String, val cause: Throwable) extends Anomaly(message, Option(cause))
 
 open class InconsistentState(message: String, val cause: Option[Throwable]) extends Anomaly(message, cause)
@@ -70,7 +73,9 @@ object Anomaly {
   def invalidInput(message: String): Throwable = new InvalidInput(message = message, cause = Option.empty)
   def invalidInput(message: String, cause: Throwable): Throwable = new InvalidInput(message, Option(cause))
 
-  def notFound(message: String) = new NotFound(message)
+  def notFound(message: String): Throwable = new NotFound(message)
+
+  def conflict(what: String, value: String): Throwable = new Conflict(what, value)
 
   /** This always represents a bug. Usually arises due to the fact that we can't express everything we want in our type
     * system For instance, doing a write to the DB + a read, you "know" that the read should always return, but if it

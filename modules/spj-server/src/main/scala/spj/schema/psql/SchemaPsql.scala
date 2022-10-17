@@ -7,7 +7,9 @@ import spj.schema.*
 final class SchemaPsql[F[_]] private (session: Session[F])(using F: MonadCancelThrow[F]) {
   def insert(id: SchemaId, jsonSchema: JsonSchema): F[Unit] =
     session.prepare(SchemaPsql.insertC).use { pc =>
-      pc.execute(id ~ jsonSchema).void // TODO: add proper handler that returns anomaly on conflict
+      pc.execute(id ~ jsonSchema).void.adaptErr { case SqlState.UniqueViolation(_) =>
+        Anomaly.conflict(what = "schemaId", value = id.value)
+      }
     }
   def find(id: SchemaId): F[Option[JsonSchema]] =
     session.prepare(SchemaPsql.getQ).use(pc => pc.option(id))

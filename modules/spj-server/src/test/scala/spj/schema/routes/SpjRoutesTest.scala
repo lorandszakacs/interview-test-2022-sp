@@ -1,18 +1,14 @@
 package spj.schema.routes
 
 import io.circe.*
-import io.circe.parser
-import io.circe.syntax.*
 import org.http4s.*
 import org.http4s.circe.CirceEntityEncoder.{*, given}
-import org.http4s.circe.*
 import org.http4s.dsl.io.*
 import org.http4s.implicits.*
 import spj.*
 import spj.config.*
 import spj.db.*
 import spj.db.flyway.*
-import spj.schema.JsonSchemaUserInput
 import spj.schema.*
 import spj.testkit.*
 
@@ -52,7 +48,8 @@ object SpjRoutesTest extends ServerTestHarness {
           |  "required": ["source", "destination"]
           |}
           |""".stripMargin)
-      createReq = Request[IO](method = Method.POST, uri = uri"/schema/config-schema").withEntity(jsonBody)
+      createReq = Request[IO](method = Method.POST, uri = uri"/schema/config-schema")
+        .withEntity(jsonBody)
       createResp <- server.app.run(createReq)
       _ <- assert(createResp.status == Status.Created).failFast
       _ <- expectJsonBody(createResp)(
@@ -64,6 +61,19 @@ object SpjRoutesTest extends ServerTestHarness {
           |}
           |""".stripMargin
       )
+      conflictResp <- server.app.run(createReq)
+      _ <- expectJsonBody(conflictResp)(
+        """{
+          |  "action":"uploadSchema",
+          |  "id":"config-schema",
+          |  "message":{
+          |    "details":"Conflict on resource: schemaId, value: config-schema",
+          |    "errorType":"spj.Conflict"
+          |  },
+          |  "status":"error"
+          |}""".stripMargin
+      )
+
     } yield ()
 
     // assumes postTest
