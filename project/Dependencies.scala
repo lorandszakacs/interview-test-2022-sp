@@ -26,15 +26,15 @@ object Dependencies {
   }
 
   object Libraries {
-    lazy val monixNewtypes = "io.monix" %% "newtypes-core" % V.monixNewtypes
-    lazy val cats = "org.typelevel" %% "cats-core" % V.cats
-    lazy val catsEffect = "org.typelevel" %% "cats-effect" % V.catsEffect
-    lazy val fs2 = "co.fs2" %% "fs2-core" % V.fs2
+    lazy val monixNewtypes = "io.monix" %% "newtypes-core" % V.monixNewtypes withSources ()
+    lazy val cats = "org.typelevel" %% "cats-core" % V.cats withSources ()
+    lazy val catsEffect = "org.typelevel" %% "cats-effect" % V.catsEffect withSources ()
+    lazy val fs2 = "co.fs2" %% "fs2-core" % V.fs2 withSources ()
 
-    lazy val ip4s = "com.comcast" %% "ip4s-core" % V.ip4s
+    lazy val ip4s = "com.comcast" %% "ip4s-core" % V.ip4s withSources ()
 
-    lazy val circe = "io.circe" %% "circe-core" % V.circe
-    lazy val circeGeneric = "io.circe" %% "circe-generic" % V.circe
+    lazy val circe = "io.circe" %% "circe-core" % V.circe withSources ()
+    lazy val circeGeneric = "io.circe" %% "circe-generic" % V.circe withSources ()
 
     /** Initially used this to create json literals. Problem is that it's not available for scala 3. The implementation:
       * {{{
@@ -47,26 +47,27 @@ object Dependencies {
       * }}}
       * Ups :)
       */
-    lazy val circeLiteral = "io.circe" %% "circe-literal" % V.circe
+    lazy val circeLiteral = "io.circe" %% "circe-literal" % V.circe withSources ()
 
-    lazy val http4sServer = "org.http4s" %% "http4s-ember-server" % V.http4s
-    lazy val http4sClient = "org.http4s" %% "http4s-ember-client" % V.http4s
-    lazy val http4sCirce = "org.http4s" %% "http4s-circe" % V.http4s
-    lazy val http4sDsl = "org.http4s" %% "http4s-dsl" % V.http4s
+    lazy val http4sServer = "org.http4s" %% "http4s-ember-server" % V.http4s withSources ()
+    lazy val http4sClient = "org.http4s" %% "http4s-ember-client" % V.http4s withSources ()
+    lazy val http4sCirce = "org.http4s" %% "http4s-circe" % V.http4s withSources ()
+    lazy val http4sDsl = "org.http4s" %% "http4s-dsl" % V.http4s withSources ()
 
-    lazy val skunk = "org.tpolecat" %% "skunk-core" % V.skunk
-    lazy val skunkCirce = "org.tpolecat" %% "skunk-circe" % V.skunk
-    lazy val sourcePos = "org.tpolecat" %% "sourcepos" % V.sourcePos
+    lazy val skunk = "org.tpolecat" %% "skunk-core" % V.skunk withSources ()
+    lazy val skunkCirce = "org.tpolecat" %% "skunk-circe" % V.skunk withSources ()
+    lazy val sourcePos = "org.tpolecat" %% "sourcepos" % V.sourcePos withSources ()
 
-    lazy val ciris = "is.cir" %% "ciris" % V.ciris
+    lazy val ciris = "is.cir" %% "ciris" % V.ciris withSources ()
 
-    lazy val weaverTest = "com.disneystreaming" %% "weaver-cats" % V.weaverTest
+    lazy val weaverTest = "com.disneystreaming" %% "weaver-cats" % V.weaverTest withSources ()
 
     object java {
-      lazy val jsonSchemaValidator = "com.github.java-json-tools" % "json-schema-validator" % V.jsonSchema
-      lazy val flyway = "org.flywaydb" % "flyway-core" % V.flyway
+      lazy val jsonSchemaValidator =
+        "com.github.java-json-tools" % "json-schema-validator" % V.jsonSchema withSources ()
+      lazy val flyway = "org.flywaydb" % "flyway-core" % V.flyway withSources ()
       // required by flyway
-      lazy val postgresqlJdbc = "org.postgresql" % "postgresql" % V.postgresqlJdbc
+      lazy val postgresqlJdbc = "org.postgresql" % "postgresql" % V.postgresqlJdbc withSources ()
 
     }
   }
