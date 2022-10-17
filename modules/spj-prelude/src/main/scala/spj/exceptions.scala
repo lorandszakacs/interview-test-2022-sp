@@ -44,18 +44,18 @@ sealed abstract class Anomaly(
 ) extends Throwable(message, cause.orNull)
     with NoStackTrace
 
-open class InvalidInput(message: String, val cause: Option[Throwable]) extends Anomaly(message, Option.empty)
+open class InvalidInputAnomaly(message: String, val cause: Option[Throwable]) extends Anomaly(message, Option.empty)
 
-open class NotFound(message: String) extends Anomaly(message, Option.empty)
+open class NotFoundAnomaly(message: String) extends Anomaly(message, Option.empty)
 
-open class Conflict(what: String, value: String)
+open class ConflictAnomaly(what: String, value: String)
     extends Anomaly(s"Conflict on resource: $what, value: $value", Option.empty)
 
-open class Unknown(message: String, val cause: Throwable) extends Anomaly(message, Option(cause))
+open class UnknownAnomaly(message: String, val cause: Throwable) extends Anomaly(message, Option(cause))
 
-open class InconsistentState(message: String, val cause: Option[Throwable]) extends Anomaly(message, cause)
+open class InconsistentStateAnomaly(message: String, val cause: Option[Throwable]) extends Anomaly(message, cause)
 
-open class Unimplemented(pos: SourcePos) extends Anomaly(s"Unimplemented @ $pos", Option.empty)
+open class UnimplementedAnomaly(pos: SourcePos) extends Anomaly(s"Unimplemented @ $pos", Option.empty)
 
 /** The reason why these methods return Throwable, instead of Anomaly is because type inference routinely will fail for
   * things for similar shape to that of cats.MonadThrow. The reason is that it's invariant in its error type :( Meaning
@@ -68,20 +68,20 @@ object Anomaly {
   def unknown(cause: Throwable): Throwable = unknownAnomaly(cause)
 
   def unknownAnomaly(cause: Throwable): Anomaly =
-    new Unknown(s"An unknown error occurred. Caused by: ${cause.getMessage}", cause)
+    new UnknownAnomaly(s"An unknown error occurred. Caused by: ${cause.getMessage}", cause)
 
-  def invalidInput(message: String): Throwable = new InvalidInput(message = message, cause = Option.empty)
-  def invalidInput(message: String, cause: Throwable): Throwable = new InvalidInput(message, Option(cause))
+  def invalidInput(message: String): Throwable = new InvalidInputAnomaly(message = message, cause = Option.empty)
+  def invalidInput(message: String, cause: Throwable): Throwable = new InvalidInputAnomaly(message, Option(cause))
 
-  def notFound(message: String): Throwable = new NotFound(message)
+  def notFound(message: String): Throwable = new NotFoundAnomaly(message)
 
-  def conflict(what: String, value: String): Throwable = new Conflict(what, value)
+  def conflict(what: String, value: String): Throwable = new ConflictAnomaly(what, value)
 
   /** This always represents a bug. Usually arises due to the fact that we can't express everything we want in our type
     * system For instance, doing a write to the DB + a read, you "know" that the read should always return, but if it
     * doesn't, that's definitely a bug.
     */
-  def inconsistent(message: String): Throwable = new InconsistentState(message = message, cause = Option.empty)
+  def inconsistent(message: String): Throwable = new InconsistentStateAnomaly(message = message, cause = Option.empty)
 
-  def unimplemented(using pos: SourcePos): Throwable = new Unimplemented(pos)
+  def unimplemented(using pos: SourcePos): Throwable = new UnimplementedAnomaly(pos)
 }

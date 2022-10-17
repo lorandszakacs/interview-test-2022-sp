@@ -11,6 +11,10 @@ sealed trait ApiResponse
 
 object ApiResponse {
 
+  sealed trait FailureResponse {
+    def message: Anomaly
+  }
+
   sealed trait Upload extends ApiResponse
   object Upload {
     given Encoder[Upload] = {
@@ -32,7 +36,7 @@ object ApiResponse {
     * {"action":"uploadSchema","id":"config-schema","status":"error","message":"Invalid JSON"}
     * }}}
     */
-  final case class UploadFailure(id: SchemaId, message: Anomaly) extends Upload
+  final case class UploadFailure(id: SchemaId, message: Anomaly) extends Upload with FailureResponse
   object UploadFailure extends FailureCompanion[UploadFailure]("uploadSchema")(semiauto.deriveEncoder)
 
   sealed trait Get extends ApiResponse
@@ -50,7 +54,7 @@ object ApiResponse {
   final case class GetSuccess(id: SchemaId, schema: JsonSchema) extends Get
   object GetSuccess extends SuccessCompanion[GetSuccess]("getSchema")(semiauto.deriveEncoder)
 
-  final case class GetFailure(id: SchemaId, message: Anomaly) extends Get
+  final case class GetFailure(id: SchemaId, message: Anomaly) extends Get with FailureResponse
   object GetFailure extends FailureCompanion[GetFailure]("getSchema")(semiauto.deriveEncoder)
 
   sealed trait Validate extends ApiResponse
@@ -70,7 +74,7 @@ object ApiResponse {
   final case class ValidateSuccess(id: SchemaId, validated: ValidatedJson) extends Validate
   object ValidateSuccess extends SuccessCompanion[ValidateSuccess]("validateDocument")(semiauto.deriveEncoder)
 
-  final case class ValidateFailure(id: SchemaId, message: Anomaly) extends Validate
+  final case class ValidateFailure(id: SchemaId, message: Anomaly) extends Validate with FailureResponse
   object ValidateFailure extends FailureCompanion[ValidateFailure]("validateDocument")(semiauto.deriveEncoder)
 
   private[ApiResponse] sealed trait SuccessCompanion[T <: ApiResponse](action: String)(enc: Encoder[T]) {

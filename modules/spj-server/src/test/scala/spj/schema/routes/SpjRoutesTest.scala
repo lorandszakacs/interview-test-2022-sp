@@ -12,6 +12,9 @@ import spj.db.flyway.*
 import spj.schema.*
 import spj.testkit.*
 
+/** Could we add more tests? Absolutely! Will we add more tests? Not really, we cover all important generic code paths
+  * which are protected by exhaustive pattern match checks. If we test one, we more or less test all.
+  */
 object SpjRoutesTest extends ServerTestHarness {
 
   test("POST schema + GET schema + POST validate - happy path") { server =>
@@ -62,13 +65,14 @@ object SpjRoutesTest extends ServerTestHarness {
           |""".stripMargin
       )
       conflictResp <- server.app.run(createReq)
+      _ <- assert(conflictResp.status == Status.Conflict).failFast
       _ <- expectJsonBody(conflictResp)(
         """{
           |  "action":"uploadSchema",
           |  "id":"config-schema",
           |  "message":{
           |    "details":"Conflict on resource: schemaId, value: config-schema",
-          |    "errorType":"spj.Conflict"
+          |    "errorType":"spj.ConflictAnomaly"
           |  },
           |  "status":"error"
           |}""".stripMargin
@@ -171,7 +175,7 @@ object SpjRoutesTest extends ServerTestHarness {
       |  "id" : "config-schema",
       |  "message" : {
       |    "details" : "instance type (string) does not match any allowed primitive type (allowed: [\"object\"])",
-      |    "errorType" : "spj.InvalidInput"
+      |    "errorType" : "spj.InvalidInputAnomaly"
       |  }
       |}""".stripMargin
       )
@@ -183,4 +187,35 @@ object SpjRoutesTest extends ServerTestHarness {
     } yield success
   }
 
+  test("GET w/ schema id that does not exist") { server =>
+    for {
+      getReq <- Request[IO](method = Method.GET, uri = uri"/schema/no-such-schema").pure[IO]
+      getResp <- server.app.run(getReq)
+      _ <- expectJsonBody(getResp)("""
+          |{
+          |  "action":"getSchema",
+          |  "id":"no-such-schema",
+          |  "message":{
+          |    "details":"json schema not found",
+          |    "errorType":"spj.NotFoundAnomaly"
+          |  },
+          |  "status":"error"
+          |}
+          |""".stripMargin)
+    } yield assert(getResp.status == Status.NotFound)
+  }
+
+  test("GET some route that is not supported") { server =>
+    for {
+      getReq <- Request[IO](method = Method.GET, uri = uri"/no-such-uri").pure[IO]
+      getResp <- server.app.run(getReq)
+      _ <- assert(getResp.status == Status.NotFound).failFast
+      _ <- ignore(
+        "Unfortunately we need to write a proper exception handler for ember to deal with this case and use an http client to test properly" +
+          "Can't handle this with just the HttpApp we use in our test"
+      )
+      _ <- expectJsonBody(getResp)("""{}""".stripMargin)
+    } yield success
+
+  }
 }
