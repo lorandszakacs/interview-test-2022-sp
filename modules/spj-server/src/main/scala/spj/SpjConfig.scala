@@ -21,7 +21,7 @@ object SpjConfig {
       default(host"localhost"),
       default(port"25432"),
       parsedDefault[DbUser]("spj_server"),
-      parsedDefault[DbPlaintextPassword]("spj_local_test_password"),
+      parsedDefault[DbPlaintextPassword]("spj_local_password"),
       parsedDefault[DbName]("json_schemas")
     ).parMapN(DbConfig.apply)
 

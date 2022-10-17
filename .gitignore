@@ -24,3 +24,8 @@ root.json
 ### MacOS ###
 .DS_Store
 Icon
+
+### Dev runtime data ###
+# adding this so that I don't polute your local docker with dangling data.
+# Makes for easier cleanup.
+.runtime
