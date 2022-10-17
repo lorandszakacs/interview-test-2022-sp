@@ -9,6 +9,7 @@ lazy val root = project
     `spj-prelude`,
     `spj-testkit`,
     `spj-db`,
+    `spj-flyway`,
     `spj-config`,
     `spj-server`,
     `spj-app`
@@ -40,6 +41,7 @@ lazy val `spj-server` = project
   .dependsOn(
     `spj-prelude`,
     `spj-db`,
+    `spj-flyway`,
     `spj-config`,
     asTestingLibrary(`spj-testkit`)
   )
@@ -56,6 +58,19 @@ lazy val `spj-db` = project
   )
   .dependsOn(
     `spj-prelude`
+  )
+
+lazy val `spj-flyway` = project
+  .in(file("modules/spj-flyway"))
+  .settings(commonSettings)
+  .settings(
+    libraryDependencies ++= Seq(
+      Dependencies.Libraries.java.flyway
+    )
+  )
+  .dependsOn(
+    `spj-prelude`,
+    `spj-db`
   )
 
 lazy val `spj-config` = project

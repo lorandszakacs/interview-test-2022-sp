@@ -17,6 +17,7 @@ object Dependencies {
     lazy val weaverTest         = "0.8.0"       // https://github.com/disneystreaming/weaver-test/releases
     // java
     lazy val jsonSchema         = "2.2.14"      // https://github.com/java-json-tools/json-schema-validator/releases
+    lazy val flyway             = "9.4.0"       // https://github.com/flyway/flyway/releases
     // format: on
 
     // scalafix rules
@@ -62,6 +63,7 @@ object Dependencies {
 
     object java {
       lazy val jsonSchemaValidator = "com.github.java-json-tools" % "json-schema-validator" % V.jsonSchema
+      lazy val flyway = "org.flywaydb" % "flyway-core" % V.flyway
     }
   }
 
