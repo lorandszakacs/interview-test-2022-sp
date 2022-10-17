@@ -26,6 +26,8 @@ import cats.effect as ce
   */
 package object spj {
   export java.lang.String
+  export scala.Predef.augmentString
+
   export java.lang.Throwable
 
   export scala.Nothing
