@@ -1,5 +1,7 @@
 ThisBuild / scalafixDependencies += Dependencies.Tools.organizeImports
 
+addCommandAlias("runServer", ";clean;compile;spj-app/runMain spj.app.Main")
+
 lazy val root = project
   .in(file("."))
   .settings(
